@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: forest-management
+  profiles:
+    active: dev
+
+logging:
+  level:
+    com.forest.management: DEBUG
+    org.springframework.web: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+demo:
+  data:
+    generate: true
+    size: 100
