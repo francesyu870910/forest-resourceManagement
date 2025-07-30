@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import { getToken, clearAuth } from './auth.js'
 
 // 创建axios实例
 const api = axios.create({
@@ -13,7 +14,11 @@ const api = axios.create({
 // 请求拦截器
 api.interceptors.request.use(
   config => {
-    // 在发送请求之前做些什么
+    // 添加认证Token
+    const token = getToken()
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   error => {
@@ -41,6 +46,9 @@ api.interceptors.response.use(
           break
         case 401:
           message = '未授权访问'
+          // Token过期或无效，清除认证信息并跳转到登录页
+          clearAuth()
+          window.location.href = '/login'
           break
         case 403:
           message = '禁止访问'
@@ -156,6 +164,23 @@ export const overviewApi = {
   getRecentActivities: () => api.get('/overview/recent-activities'),
   // 获取系统状态
   getSystemStatus: () => api.get('/overview/system-status')
+}
+
+export const userApi = {
+  // 获取用户列表
+  getList: (params) => api.get('/users', { params }),
+  // 获取用户详情
+  getById: (id) => api.get(`/users/${id}`),
+  // 创建用户
+  create: (data) => api.post('/users', data),
+  // 更新用户
+  update: (id, data) => api.put(`/users/${id}`, data),
+  // 删除用户
+  delete: (id) => api.delete(`/users/${id}`),
+  // 重置用户密码
+  resetPassword: (id, data) => api.put(`/users/${id}/reset-password`, data),
+  // 更新用户状态
+  updateStatus: (id, enabled) => api.put(`/users/${id}/status`, { enabled })
 }
 
 export default api

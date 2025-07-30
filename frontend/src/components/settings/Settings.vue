@@ -3,42 +3,8 @@
     <div class="page-header">
       <h2>系统设置</h2>
     </div>
-
     <el-row :gutter="20">
       <el-col :span="12">
-        <!-- 基本设置 -->
-        <el-card class="settings-card">
-          <template #header>
-            <span>基本设置</span>
-          </template>
-          <el-form :model="basicSettings" label-width="100px">
-            <el-form-item label="系统名称">
-              <el-input v-model="basicSettings.systemName" />
-            </el-form-item>
-            <el-form-item label="系统版本">
-              <el-input v-model="basicSettings.version" readonly />
-            </el-form-item>
-            <el-form-item label="管理单位">
-              <el-input v-model="basicSettings.organization" />
-            </el-form-item>
-            <el-form-item label="联系电话">
-              <el-input v-model="basicSettings.phone" />
-            </el-form-item>
-            <el-form-item label="系统描述">
-              <el-input
-                v-model="basicSettings.description"
-                type="textarea"
-                :rows="3"
-              />
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="saveBasicSettings">
-                保存设置
-              </el-button>
-            </el-form-item>
-          </el-form>
-        </el-card>
-
         <!-- 数据设置 -->
         <el-card class="settings-card">
           <template #header>
@@ -92,47 +58,12 @@
               <el-switch v-model="notificationSettings.resourceAlert" />
               <span class="setting-desc">异常变化时预警</span>
             </el-form-item>
-            <el-form-item label="邮件通知">
-              <el-switch v-model="notificationSettings.emailNotification" />
-            </el-form-item>
-            <el-form-item label="短信通知">
-              <el-switch v-model="notificationSettings.smsNotification" />
-            </el-form-item>
             <el-form-item>
               <el-button type="primary" @click="saveNotificationSettings">
                 保存设置
               </el-button>
             </el-form-item>
           </el-form>
-        </el-card>
-
-        <!-- 系统信息 -->
-        <el-card class="info-card">
-          <template #header>
-            <span>系统信息</span>
-          </template>
-          <div class="info-list">
-            <div class="info-item">
-              <span class="info-label">系统版本</span>
-              <span class="info-value">v2.1.3</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">构建时间</span>
-              <span class="info-value">2024-12-15</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">运行环境</span>
-              <span class="info-value">生产环境</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">数据存储</span>
-              <span class="info-value">MySQL 8.0</span>
-            </div>
-            <div class="info-item">
-              <span class="info-label">最后更新</span>
-              <span class="info-value">{{ lastUpdateTime }}</span>
-            </div>
-          </div>
         </el-card>
       </el-col>
     </el-row>

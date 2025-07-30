@@ -231,6 +231,43 @@ export const businessRules = {
   approvalOpinion: [
     commonRules.required('请输入审批意见'),
     commonRules.minLength(5, '审批意见至少5个字符')
+  ],
+
+  // 用户名验证
+  username: [
+    commonRules.required('请输入用户名'),
+    commonRules.length(3, 50, '用户名长度在3-50个字符'),
+    {
+      pattern: /^[a-zA-Z0-9_]+$/,
+      message: '用户名只能包含字母、数字和下划线',
+      trigger: 'blur'
+    }
+  ],
+
+  // 密码验证
+  password: [
+    commonRules.required('请输入密码'),
+    commonRules.minLength(6, '密码长度至少6个字符'),
+    {
+      pattern: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d@$!%*#?&]{6,}$/,
+      message: '密码必须包含字母和数字',
+      trigger: 'blur'
+    }
+  ],
+
+  // 用户角色验证
+  userRole: [
+    commonRules.required('请选择用户角色'),
+    {
+      validator: (rule, value, callback) => {
+        if (!['ADMIN', 'USER'].includes(value)) {
+          callback(new Error('无效的用户角色'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'change'
+    }
   ]
 }
 

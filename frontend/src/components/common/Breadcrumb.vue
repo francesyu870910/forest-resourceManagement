@@ -29,6 +29,7 @@ const routeTitleMap = {
   '/resource-monitor': '资源动态监测',
   '/forest-rights': '林权证书管理',
   '/cutting-permit': '采伐许可管理',
+  '/users': '用户管理',
   '/statistics': '统计报表',
   '/settings': '系统设置',
   '/help': '帮助文档'

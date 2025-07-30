@@ -1,6 +1,12 @@
 <template>
   <div id="app">
-    <el-container class="layout-container">
+    <!-- 登录页面布局 -->
+    <div v-if="isAuthPage" class="auth-layout">
+      <router-view />
+    </div>
+    
+    <!-- 主应用布局 -->
+    <el-container v-else class="layout-container">
       <el-header class="header">
         <NavMenu />
       </el-header>
@@ -14,14 +20,48 @@
 </template>
 
 <script>
+import { computed, provide, ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import NavMenu from './components/common/NavMenu.vue'
 import Breadcrumb from './components/common/Breadcrumb.vue'
+import { isLoggedIn, getUserInfo } from './utils/auth'
 
 export default {
   name: 'App',
   components: {
     NavMenu,
     Breadcrumb
+  },
+  setup() {
+    const route = useRoute()
+    const userInfo = ref(null)
+    const loginStatus = ref(false)
+    
+    // 判断是否为认证相关页面
+    const isAuthPage = computed(() => {
+      return ['Login', 'ResetPassword'].includes(route.name)
+    })
+    
+    // 更新用户信息
+    const updateUserInfo = () => {
+      loginStatus.value = isLoggedIn()
+      userInfo.value = getUserInfo()
+    }
+    
+    // 提供全局状态给子组件
+    provide('userInfo', userInfo)
+    provide('loginStatus', loginStatus)
+    provide('updateUserInfo', updateUserInfo)
+    
+    onMounted(() => {
+      updateUserInfo()
+    })
+    
+    return {
+      isAuthPage,
+      userInfo,
+      loginStatus
+    }
   }
 }
 </script>
@@ -50,6 +90,14 @@ export default {
 .main-content {
   background-color: #f8f9fa;
   padding: 20px;
+}
+
+.auth-layout {
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 /* 响应式设计 */
