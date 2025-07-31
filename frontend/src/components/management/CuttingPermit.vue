@@ -89,6 +89,10 @@
           </el-tag>
         </template>
         
+        <template #applicationDate="{ row }">
+          {{ formatDate(row.applicationDate) }}
+        </template>
+        
         <template #validUntil="{ row }">
           <span v-if="row.validUntil" :class="{ 'expiring-date': isExpiringSoon(row.validUntil) }">
             {{ formatDate(row.validUntil) }}
@@ -523,9 +527,13 @@ const approvalRules = {
 }
 
 // 格式化日期函数
-const formatDate = (row, column, cellValue) => {
-  if (!cellValue) return ''
-  return new Date(cellValue).toLocaleDateString('zh-CN')
+const formatDate = (date) => {
+  if (!date) return ''
+  // 处理后端返回的日期格式 (YYYY-MM-DD)
+  if (typeof date === 'string') {
+    return date
+  }
+  return new Date(date).toLocaleDateString('zh-CN')
 }
 
 // 表格列配置
@@ -537,7 +545,7 @@ const tableColumns = [
   { prop: 'cuttingArea', label: '采伐面积(公顷)', width: 120 },
   { prop: 'cuttingVolume', label: '采伐量(立方米)', width: 120 },
   { prop: 'status', label: '状态', width: 100, slot: 'status' },
-  { prop: 'applicationDate', label: '申请日期', width: 120, formatter: formatDate },
+  { prop: 'applicationDate', label: '申请日期', width: 120, slot: 'applicationDate' },
   { prop: 'validUntil', label: '有效期至', width: 120, slot: 'validUntil' }
 ]
 

@@ -85,6 +85,10 @@
           </el-tag>
         </template>
         
+        <template #issueDate="{ row }">
+          {{ formatDate(row.issueDate) }}
+        </template>
+        
         <template #expiryDate="{ row }">
           <span :class="{ 'expiring-date': isExpiringSoon(row.expiryDate) }">
             {{ formatDate(row.expiryDate) }}
@@ -356,9 +360,13 @@ const formRules = {
 }
 
 // 格式化日期函数
-const formatDate = (row, column, cellValue) => {
-  if (!cellValue) return ''
-  return new Date(cellValue).toLocaleDateString('zh-CN')
+const formatDate = (date) => {
+  if (!date) return ''
+  // 处理后端返回的日期格式 (YYYY-MM-DD)
+  if (typeof date === 'string') {
+    return date
+  }
+  return new Date(date).toLocaleDateString('zh-CN')
 }
 
 // 表格列配置
@@ -368,7 +376,7 @@ const tableColumns = [
   { prop: 'ownerName', label: '权利人', width: 120 },
   { prop: 'forestLandName', label: '林地名称', minWidth: 150 },
   { prop: 'status', label: '状态', width: 100, slot: 'status' },
-  { prop: 'issueDate', label: '发证日期', width: 120, formatter: formatDate },
+  { prop: 'issueDate', label: '发证日期', width: 120, slot: 'issueDate' },
   { prop: 'expiryDate', label: '到期日期', width: 140, slot: 'expiryDate' },
   { prop: 'issueOrgan', label: '发证机关', width: 120 }
 ]
